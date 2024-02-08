@@ -45,7 +45,7 @@ async function run() {
       app.get('/allTask',async(req,res)=>{
            try{
               const filterinfo=req.body
-            console.log(filterinfo)
+            
               const {email}=req.query
              
               
@@ -63,10 +63,10 @@ async function run() {
       app.delete('/allTaskdele/:id',async(req,res)=>{
           try{
             const id=req.params.id
-            console.log(id)
+           
             const query={_id: new ObjectId(id)}
             const result= await allTaskCollection.deleteOne(query)
-            console.log(result)
+         
             res.send(result)
           }
           catch{
@@ -106,7 +106,7 @@ async function run() {
       app.put('/updateTask/:status/:id',async(req,res)=>{
         const status = req.params.status
         const Id = req.params.id
-        console.log(Id,status)
+       
         const query = { _id : new ObjectId(Id)  }
         const updateDoc = {
           $set:{
