@@ -1,6 +1,7 @@
 const express =require('express');
 const app =express();
 const cors =require('cors')
+const { MongoClient, ServerApiVersion,ObjectId } = require('mongodb');
 require ('dotenv').config()
 const port =process.env.PORT || 5000 ;
 
@@ -9,7 +10,7 @@ app.use(cors());
 app.use(express.json())
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+
 const uri = "mongodb+srv://Qtec-job-task:Ps1Qf8peehQjQg9M@cluster0.sikjemj.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -39,6 +40,29 @@ async function run() {
            {
             return res.send({error:true})
            }
+      })
+
+      app.get('/allTask',async(req,res)=>{
+           try{
+             const result =await allTaskCollection.find().toArray()
+             return res.send(result)
+           }
+           catch{
+            return res.send({error:true})
+          }
+      })
+      app.delete('/allTaskdele/:id',async(req,res)=>{
+      
+          
+          const id=req.params.id
+          console.log(id)
+          const query={_id: new ObjectId(id)}
+          const result= await allTaskCollection.deleteOne(query)
+          console.log(result)
+          res.send(result)
+         
+        
+
       })
 
 
