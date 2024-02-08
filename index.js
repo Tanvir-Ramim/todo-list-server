@@ -44,7 +44,11 @@ async function run() {
 
       app.get('/allTask',async(req,res)=>{
            try{
+              const filterinfo=req.body
+            console.log(filterinfo)
               const {email}=req.query
+             
+              
               if(email){
                 const query={userMail : email}
                 const result =await allTaskCollection.find(query).toArray()
@@ -89,22 +93,35 @@ async function run() {
               deadline :newdeadline
             }
           }
-           
+
           const result =await allTaskCollection.updateOne(filter,updateInfo,options)
           return res.send(result)
-
           }
           catch{
 
           }
+          
+      })
+
+      app.put('/updateTask/:status/:id',async(req,res)=>{
+        const status = req.params.status
+        const Id = req.params.id
+        console.log(Id,status)
+        const query = { _id : new ObjectId(Id)  }
+        const updateDoc = {
+          $set:{
+            position : status
+          }
+        }
+        const result = await allTaskCollection.updateOne(query,updateDoc)
+        res.send(result)
+        
       })
 
 
 
-
-
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
@@ -121,8 +138,7 @@ run().catch(console.dir);
 app.get('/',(req,res)=>{
       res.send('Server Is running')
 })
-// Ps1Qf8peehQjQg9M
-// Qtec-job-task
+
 app.listen(port ,()=>{
        console.log(`Server Is running on port ${port}`)
 })
