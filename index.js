@@ -44,8 +44,13 @@ async function run() {
 
       app.get('/allTask',async(req,res)=>{
            try{
-             const result =await allTaskCollection.find().toArray()
+              const {email}=req.query
+              if(email){
+                const query={userMail : email}
+                const result =await allTaskCollection.find(query).toArray()
              return res.send(result)
+              }
+             
            }
            catch{
             return res.send({error:true})
