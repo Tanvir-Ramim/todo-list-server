@@ -52,19 +52,47 @@ async function run() {
           }
       })
       app.delete('/allTaskdele/:id',async(req,res)=>{
-      
-          
-          const id=req.params.id
-          console.log(id)
-          const query={_id: new ObjectId(id)}
-          const result= await allTaskCollection.deleteOne(query)
-          console.log(result)
-          res.send(result)
-         
-        
+          try{
+            const id=req.params.id
+            console.log(id)
+            const query={_id: new ObjectId(id)}
+            const result= await allTaskCollection.deleteOne(query)
+            console.log(result)
+            res.send(result)
+          }
+          catch{
+           return res.send({error:true})
+         }
 
       })
+     
 
+      app.put('/allTask',async(req,res)=>{
+          try{
+           const info=req.body
+           const filter={_id : new ObjectId(info.id)}
+           const options = { upsert: true };
+           const {
+            newtaskName,newdescription,newpriority,newdeadline,id
+          } = info || {}
+        
+          const updateInfo={
+            $set :{
+              taskName:newtaskName,
+              description: newdescription,
+              priority:newpriority,
+              deadline :newdeadline
+            }
+          }
+           
+          const result =await allTaskCollection.updateOne(filter,updateInfo,options)
+          return res.send(result)
+
+          }
+          catch{
+
+          }
+      })
 
 
 
